@@ -102,3 +102,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# downloads folder
+public/uploads/*
+!public/uploads/.gitkeep
