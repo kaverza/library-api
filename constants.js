@@ -15,8 +15,10 @@ const BOOKS_MOCK = [
 ]
 
 const USER_MOCK = new User();
+const UPLOADED_FILE_PATH = 'public/uploads';
 
 module.exports = {
     BOOKS_MOCK,
-    USER_MOCK
+    USER_MOCK,
+    UPLOADED_FILE_PATH
 }

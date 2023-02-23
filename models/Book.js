@@ -1,13 +1,14 @@
 const { v4: uuid } = require('uuid');
 
-module.exports = class Boook {
+module.exports = class Book {
     constructor(
-        title = '',
-        description = '',
-        authors = '',
-        favorite = '',
-        fileCover = '',
-        fileName = '',
+        title = null,
+        description = null,
+        authors = null,
+        favorite = null,
+        fileCover = null,
+        fileName = null,
+        fileBook = null,
         id = uuid()
     ) {
         this.id = id;
@@ -17,5 +18,6 @@ module.exports = class Boook {
         this.favorite = favorite;
         this.fileCover = fileCover;
         this.fileName = fileName;
+        this.fileBook = fileBook;
     }
 }
