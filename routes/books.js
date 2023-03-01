@@ -10,8 +10,11 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     const { books } = db;
+    res.render('index', { books });
+});
 
-    res.json(books);
+router.get('/create', (req, res) => {
+    res.render('create');
 });
 
 router.get('/:id', (req, res) => {
@@ -20,14 +23,14 @@ router.get('/:id', (req, res) => {
     const [book = null] = books.filter(item => item.id === id);
 
     if (book) {
-        return res.json(book);
+        return res.render('view', { book })
     }
 
     res.status(404);
-    res.json('[Book] - page not found');
+    res.render('not-found');
 });
 
-router.post('/', fileMulter, (req, res) => {
+router.post('/create', fileMulter, (req, res) => {
     const { books } = db;
     const { 
         title = null,
@@ -35,10 +38,10 @@ router.post('/', fileMulter, (req, res) => {
         authors = null,
         favorite = null,
         fileCover = null,
-        fileName = null,
     } = req.body;
 
     const fileBook = req.file ? req.file.filename : null;
+    const fileName = req.file ? req.file.originalname : null;
     const newBook = new Book(
         title,
         description,
@@ -51,8 +54,7 @@ router.post('/', fileMulter, (req, res) => {
 
     books.push(newBook);
 
-    res.status(201);
-    res.json(newBook);
+    res.redirect(`${newBook.id}`);
 });
 
 router.get('/:id/download', (req, res) => {
@@ -64,23 +66,36 @@ router.get('/:id/download', (req, res) => {
         const fileName = books[idx].fileBook;
         if (!fileName) {
             res.status(404);
-            res.json('[Book] - file not found');
+            res.render('not-found');
         }
 
         const filePath = path.join(UPLOADED_FILE_PATH, books[idx].fileBook);
         const fileExists = fs.existsSync(filePath);
 
-        if (fileExists) return res.download(filePath);
+        if (fileExists) return res.download(filePath, books[idx].fileName);
 
         res.status(404);
-        res.json('[Book] - file not found');
+        res.render('not-found');
     }
 
     res.status(404);
     res.json('[Book] - page not found');
 });
 
-router.put('/:id', (req, res) => {
+router.get('/:id/edit', (req, res) => {
+    const { books } = db;
+    const { id } = req.params;
+    const [book = null] = books.filter(item => item.id === id);
+
+    if (book) {
+        return res.render('update', { book })
+    }
+
+    res.status(404);
+    res.render('not-found');
+});
+
+router.post('/:id/edit', fileMulter, (req, res) => {
     const { books } = db;
     const { id } = req.params;
     const { 
@@ -89,8 +104,12 @@ router.put('/:id', (req, res) => {
         authors = null,
         favorite = null,
         fileCover = null,
-        fileName = null,
      } = req.body;
+
+     const fileBook = req.file ? req.file.filename : null;
+     const fileName = req.file ? req.file.originalname : null;
+
+     console.log({fileBook});
 
      const idx = books.findIndex(item => item.id === id);
 
@@ -103,26 +122,27 @@ router.put('/:id', (req, res) => {
             favorite: favorite ?? books[idx].favorite,
             fileCover: fileCover ?? books[idx].fileCover,
             fileName: fileName ?? books[idx].fileName,
+            fileBook: fileBook ?? books[idx].fileBook,
         }
-        return res.json(books[idx]);
+        return res.redirect(`/${id}`);
      }
 
      res.status(404);
-     res.json('[Book] - page not found');
+     res.render('not-found');
 });
 
-router.delete('/:id', (req, res) => {
+router.post('/:id/delete', (req, res) => {
     const { books } = db;
     const { id } = req.params;
     const idx = books.findIndex(item => item.id === id);
 
     if (idx >= 0) {
         books.splice(idx, 1);
-        return res.json('ok');
+        return res.redirect('/');
     }
 
     res.status(404);
-    res.json('[Book] - page not found');
+    res.render('not-found');
 });
 
 module.exports = router;
