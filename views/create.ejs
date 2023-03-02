@@ -1,0 +1,30 @@
+<%- include('blocks/header'); %>
+<div class="container">
+    <h1>Добавление книги</h1>
+    <form method="post" enctype="multipart/form-data">
+        <table class="table">
+            <tr>
+                <td class="w-25"><strong>Название</strong></td>
+                <td> <input name="title" class="form-control" value="" /> </td>
+            </tr>
+            <tr>
+                <td><strong>Описание</strong></td>
+                <td><textarea name="description" rows="10" class="form-control"></textarea></td>
+            </tr>
+            <tr>
+                <td><strong>Автор</strong></td>
+                <td> <input name="authors" class="form-control" value="" /> </td>
+            </tr>
+            <tr>
+                <td>Загрузить книгу</td>
+                <td><input name="fileBook" type="file" class="form-control" /></td>
+            </tr>
+            <tr>
+                <td><button class="btn btn-success" type="submit">Добавить</button></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+<%- include('blocks/footer'); %>

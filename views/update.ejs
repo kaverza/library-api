@@ -1,0 +1,36 @@
+<%- include('blocks/header'); %>
+<div class="container">
+    <h1>Редактирование книги</h1>
+    <form method="post" enctype="multipart/form-data">
+        <table class="table">
+            <tr>
+                <td class="w-25"><strong>Название</strong></td>
+                <td> <input name="title" class="form-control" value="<%= book.title %>" /> </td>
+            </tr>
+            <tr>
+                <td><strong>Описание</strong></td>
+                <td><textarea name="description" rows="10" class="form-control"><%= book.description %></textarea></td>
+            </tr>
+            <tr>
+                <td><strong>Автор</strong></td>
+                <td> <input name="authors" class="form-control" value="<%= book.authors %>" /> </td>
+            </tr>
+            <% if (book.fileBook) { %>
+                <tr>
+                    <td>Книга</td>
+                    <td><a href="/<%= book.id %>/download" target="_blank" class="btn btn-success">Скачать (<%= book.fileName %>)</a></td>
+                </tr>
+            <% } %>
+            <tr>
+                <td>Загрузить книгу</td>
+                <td><input name="fileBook" type="file" class="form-control" /></td>
+            </tr>
+            <tr>
+                <td><button class="btn btn-success" type="submit">Сохранить</button></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+<%- include('blocks/footer'); %>

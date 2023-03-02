@@ -17,6 +17,7 @@ module.exports = (req, res, next) => {
             if (err.code === 'LIMIT_UNEXPECTED_FILE') {
                 res.status(400);
                 res.json(err);
+                next(err.message);
             }
         }
         next();
