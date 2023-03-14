@@ -19,6 +19,12 @@
                 <td><a href="/<%= book.id %>/download" target="_blank" class="btn btn-success">Скачать (<%= book.fileName %>)</a></td>
             </tr>
             <% } %>
+            <% if (counter) { %>
+                <tr>
+                    <td><strong>Просмотры</strong></td>
+                    <td><%= counter %></td>
+                </tr>
+            <% } %>
         </table>
     </div>
 <%- include('blocks/footer'); %>
