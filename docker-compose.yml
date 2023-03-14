@@ -1,0 +1,14 @@
+services:
+  counter:
+    image: kaverza/counter:0.0.7
+    volumes:
+      - ./data:/app/data
+    working_dir: /app
+    environment:
+      - PORT=3001
+  library:
+    image: kaverza/library:0.0.2
+    ports:
+      - 80:3000
+    depends_on:
+      - counter

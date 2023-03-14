@@ -3,10 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../database/db');
 const Book = require('../models/Book');
-const { UPLOADED_FILE_PATH } = require('../constants');
+const { UPLOADED_FILE_PATH, COUNTER_SERVICE } = require('../constants');
 const fileMulter = require('../middleware/file');
 
 const router = express.Router();
+const axios = require('axios');
 
 router.get('/', (req, res) => {
     const { books } = db;
@@ -17,13 +18,16 @@ router.get('/create', (req, res) => {
     res.render('create');
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     const { books } = db;
     const { id } = req.params;
     const [book = null] = books.filter(item => item.id === id);
 
     if (book) {
-        return res.render('view', { book })
+        await axios.post(`${COUNTER_SERVICE}counter/${id}/inc`, {}).catch(err => console.log(err));
+        const counter = await axios.get(`${COUNTER_SERVICE}counter/${id}`).catch(() => 0);
+        
+        return res.render('view', { book, counter: counter.data });
     }
 
     res.status(404);
